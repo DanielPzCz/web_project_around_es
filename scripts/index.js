@@ -30,22 +30,43 @@ initialCards.forEach(function (card) {
 });
 
 const profileSection = document.querySelector(".profile");
+const editProfileBtn = profileSection.querySelector(".profile__edit-button");
+const profileTitle = profileSection.querySelector(".profile__title");
+const profileDescription = profileSection.querySelector(
+  ".profile__description"
+);
+
 const editProfilePopup = document.querySelector("#edit-popup");
 const editFormPopup = editProfilePopup.querySelector("#edit-profile-form");
+const closeEditProfileBtn = editProfilePopup.querySelector(".popup__close");
 
-const editProfileBtn =
-  profileSection.querySelector(".profile__edit-button");
+const saveEditProfileBtn = editFormPopup.querySelector(".popup__button");
+const nameInput = editFormPopup.querySelector(".popup__input_type_name");
+const descriptionInput = editFormPopup.querySelector(
+  ".popup__input_type_description"
+);
 
-const closeEditProfileBtn =
-  editProfilePopup.querySelector(".popup__close");
+const fillProfileForm = () => {
+  nameInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
+};
 
-const fillProfileForm = () => "";
-
-editProfileBtn.addEventListener("click", () => {
+const handleOpenEditModal = () => {
   editProfilePopup.classList.add("popup_is-opened");
-  editFormPopup.classList.add("popup_is-opened");
-});
+  fillProfileForm();
+};
+
+const handleProfileFormSubmit = (evt) => {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = descriptionInput.value;
+  editProfilePopup.classList.remove("popup_is-opened");
+};
+
+editProfileBtn.addEventListener("click", handleOpenEditModal);
 
 closeEditProfileBtn.addEventListener("click", () => {
   editProfilePopup.classList.remove("popup_is-opened");
 });
+
+editProfilePopup.addEventListener("submit", handleProfileFormSubmit);
