@@ -28,3 +28,24 @@ initialCards = [
 initialCards.forEach(function (card) {
   console.log(card.name);
 });
+
+const profileSection = document.querySelector(".profile");
+const editProfilePopup = document.querySelector("#edit-popup");
+const editFormPopup = editProfilePopup.querySelector("#edit-profile-form");
+
+const editProfileBtn =
+  profileSection.querySelector(".profile__edit-button");
+
+const closeEditProfileBtn =
+  editProfilePopup.querySelector(".popup__close");
+
+const fillProfileForm = () => "";
+
+editProfileBtn.addEventListener("click", () => {
+  editProfilePopup.classList.add("popup_is-opened");
+  editFormPopup.classList.add("popup_is-opened");
+});
+
+closeEditProfileBtn.addEventListener("click", () => {
+  editProfilePopup.classList.remove("popup_is-opened");
+});

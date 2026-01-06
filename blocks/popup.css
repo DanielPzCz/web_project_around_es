@@ -62,6 +62,7 @@
 
 .popup__form {
   margin-top: 27px;
+  visibility: hidden;
 }
 
 .popup__input {
