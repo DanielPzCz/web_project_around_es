@@ -1,4 +1,120 @@
-initialCards = [
+const profileSection = document.querySelector(".profile");
+const editProfileBtn = profileSection.querySelector(".profile__edit-button");
+const newCardBtn = profileSection.querySelector(".profile__add-button");
+const profileTitle = profileSection.querySelector(".profile__title");
+const profileDescription = profileSection.querySelector(
+  ".profile__description"
+);
+
+const editProfilePopup = document.querySelector("#edit-popup");
+const editFormPopup = editProfilePopup.querySelector("#edit-profile-form");
+const closeEditProfileBtn = editProfilePopup.querySelector(".popup__close");
+
+const saveEditProfileBtn = editFormPopup.querySelector(".popup__button");
+const nameInput = editFormPopup.querySelector(".popup__input_type_name");
+const descriptionInput = editFormPopup.querySelector(
+  ".popup__input_type_description"
+);
+
+const newCardPopup = document.querySelector("#new-card-popup");
+const newCardFormPopup = newCardPopup.querySelector("#new-card-form");
+const closeNewCardBtn = newCardPopup.querySelector(".popup__close");
+
+const saveNewCardBtn = newCardFormPopup.querySelector(".popup__button");
+const cardTitle = newCardFormPopup.querySelector(".popup__input_type_card-name");
+const cardLink = newCardFormPopup.querySelector(".popup__input_type_url")
+
+const cardsSection = document.querySelector(".cards");
+const cardsContainer = cardsSection.querySelector(".cards__list");
+const cardTemplate = document.querySelector("#template__card").content.querySelector(".card");
+
+const bigImagePopup = document.querySelector("#image-popup");
+const closeBigImageBtn = bigImagePopup.querySelector(".popup__close");
+
+const bigImage = bigImagePopup.querySelector(".popup__image");
+const bigImageCaption = bigImagePopup.querySelector(".popup__caption");
+
+const openPopup = popup => popup.classList.add("popup_is-opened");
+const closePopup = popup => popup.classList.remove("popup_is-opened");
+
+const fillProfileForm = () => {
+  nameInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
+};
+
+const handleOpenEditModal = () => {
+  openPopup(editProfilePopup);
+  fillProfileForm();
+};
+
+const handleProfileFormSubmit = (evt) => {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = descriptionInput.value;
+  closePopup(newCardPopup);
+};
+
+const handleNewCardFormSubmit = (evt) => {
+  evt.preventDefault();
+  renderCard(cardTitle.value, cardLink.value, cardsContainer);
+  newCardFormPopup.reset();
+  closePopup(newCardPopup);
+};
+
+const handleImagePopup = (title, link) => {
+  bigImage.src = link;
+  bigImage.alt = title;
+  bigImageCaption.textContent = title;
+  openPopup(bigImagePopup);
+};
+
+const getCardElement = (title = "Sin Título", link) => {
+  const cardElement = cardTemplate.cloneNode(true);
+  const cardTitle = cardElement.querySelector(".card__title");
+  const cardImg = cardElement.querySelector(".card__image");
+  
+  cardTitle.textContent = title;
+  cardImg.src = link;
+  cardImg.alt = title;
+
+  cardImg.onerror = () => {
+    cardImg.onerror = null;
+    cardImg.src = "../images/placeholder.jpg";
+  };
+
+  const cardLikeBtn = cardElement.querySelector(".card__like-button");
+  cardLikeBtn.addEventListener("click", function (evt) {
+    evt.target.classList.toggle("card__like-button_is-active");
+  });
+
+  const cardDeleteBtn = cardElement.querySelector(".card__delete-button");
+  cardDeleteBtn.addEventListener("click", function () {
+    cardElement.remove();
+  });
+  
+  cardImg.addEventListener("click", function () {
+    handleImagePopup(title,link)
+  });
+
+  return cardElement;
+}
+
+const renderCard = (title, link, container) => {
+  const cardElement = getCardElement(title, link);
+  container.append(cardElement);
+}
+
+editProfileBtn.addEventListener("click", handleOpenEditModal);
+newCardBtn.addEventListener("click", () => openPopup(newCardPopup));
+
+closeEditProfileBtn.addEventListener("click", () => closePopup(editProfilePopup));
+closeNewCardBtn.addEventListener("click", () => closePopup(newCardPopup));
+closeBigImageBtn.addEventListener("click", () => closePopup(bigImagePopup));
+
+editProfilePopup.addEventListener("submit", handleProfileFormSubmit);
+newCardPopup.addEventListener("submit", handleNewCardFormSubmit);
+
+const initialCards = [
   {
     name: "Valle de Yosemite",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
@@ -26,47 +142,5 @@ initialCards = [
 ];
 
 initialCards.forEach(function (card) {
-  console.log(card.name);
+  renderCard(card.name, card.link, cardsContainer);
 });
-
-const profileSection = document.querySelector(".profile");
-const editProfileBtn = profileSection.querySelector(".profile__edit-button");
-const profileTitle = profileSection.querySelector(".profile__title");
-const profileDescription = profileSection.querySelector(
-  ".profile__description"
-);
-
-const editProfilePopup = document.querySelector("#edit-popup");
-const editFormPopup = editProfilePopup.querySelector("#edit-profile-form");
-const closeEditProfileBtn = editProfilePopup.querySelector(".popup__close");
-
-const saveEditProfileBtn = editFormPopup.querySelector(".popup__button");
-const nameInput = editFormPopup.querySelector(".popup__input_type_name");
-const descriptionInput = editFormPopup.querySelector(
-  ".popup__input_type_description"
-);
-
-const fillProfileForm = () => {
-  nameInput.value = profileTitle.textContent;
-  descriptionInput.value = profileDescription.textContent;
-};
-
-const handleOpenEditModal = () => {
-  editProfilePopup.classList.add("popup_is-opened");
-  fillProfileForm();
-};
-
-const handleProfileFormSubmit = (evt) => {
-  evt.preventDefault();
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = descriptionInput.value;
-  editProfilePopup.classList.remove("popup_is-opened");
-};
-
-editProfileBtn.addEventListener("click", handleOpenEditModal);
-
-closeEditProfileBtn.addEventListener("click", () => {
-  editProfilePopup.classList.remove("popup_is-opened");
-});
-
-editProfilePopup.addEventListener("submit", handleProfileFormSubmit);
