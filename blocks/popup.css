@@ -26,7 +26,15 @@
   margin-top: 48px;
 }
 
-.popup__button:hover {
+.popup__button:disabled {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000000;
+  opacity: 0.2;
+  border: 2px solid #000000;
+  cursor: not-allowed;
+}
+
+.popup__button:not(:disabled):hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
 }
@@ -78,6 +86,23 @@
 
 .popup__input:last-of-type {
   margin-bottom: 0;
+}
+
+.popup__input-error {
+  display: none;
+  font-size: 12px;
+  color: red;
+}
+
+.popup__input_type_error {
+  border-color: red;
+  border-bottom-width: 2px;
+}
+
+.popup__input-error_active {
+  display: block;
+  color: red;
+  font-size: 12px;
 }
 
 .popup__title {
