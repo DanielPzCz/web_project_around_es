@@ -27,7 +27,19 @@ La aplicación presenta una interfaz intuitiva y responsiva que se adapta a dife
   - Validación de formularios
   - Event listeners
   - Template elements
+  - Clases y módulos ES6
+  - Importación/exportación de módulos
 - **Fuentes Web**: Google Fonts (Inter)
+
+### Clases Principales
+
+- **Card**: Crea y gestiona tarjetas individuales con funcionalidad de "me gusta", eliminación y visualización de imágenes
+- **Section**: Renderiza listas de elementos en el DOM
+- **Popup**: Clase base para ventanas emergentes con funcionalidad de apertura/cierre
+- **PopupWithForm**: Extiende Popup para manejar formularios
+- **PopupWithImage**: Extiende Popup para mostrar imágenes en tamaño completo
+- **UserInfo**: Gestiona la información del perfil del usuario
+- **FormValidator**: Valida formularios en tiempo real
 
 ## Link GitHub Pages
 

@@ -31,15 +31,6 @@ export default class PopupWithForm extends Popup {
       evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
     });
-
-    this._popup.addEventListener("click", (evt) => {
-      if (
-        evt.target === evt.currentTarget ||
-        evt.target.classList.contains("popup__close")
-      ) {
-        this.close();
-      }
-    });
   }
 
   close() {
