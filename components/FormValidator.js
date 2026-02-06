@@ -1,18 +1,19 @@
+// components/FormValidator.js
 export default class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
     this._inputList = Array.from(
-      this._formElement.querySelectorAll(this._config.inputSelector)
+      this._formElement.querySelectorAll(this._config.inputSelector),
     );
     this._buttonElement = this._formElement.querySelector(
-      this._config.submitButtonSelector
+      this._config.submitButtonSelector,
     );
   }
 
   _showInputError(inputElement, errorMessage) {
     const errorElement = this._formElement.querySelector(
-      `.${inputElement.id}-input-error`
+      `.${inputElement.id}-input-error`,
     );
 
     inputElement.classList.add(this._config.inputErrorClass);
@@ -22,7 +23,7 @@ export default class FormValidator {
 
   _hideInputError(inputElement) {
     const errorElement = this._formElement.querySelector(
-      `.${inputElement.id}-input-error`
+      `.${inputElement.id}-input-error`,
     );
 
     inputElement.classList.remove(this._config.inputErrorClass);
@@ -50,10 +51,7 @@ export default class FormValidator {
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         if (!inputElement.validity.valid) {
-          this._showInputError(
-            inputElement,
-            inputElement.validationMessage
-          );
+          this._showInputError(inputElement, inputElement.validationMessage);
         } else {
           this._hideInputError(inputElement);
         }

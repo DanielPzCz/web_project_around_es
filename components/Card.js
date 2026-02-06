@@ -1,3 +1,4 @@
+// components/Card.js
 export default class Card {
   constructor({ title, link }, templateSelector, handleImageClick) {
     this._title = title;
@@ -9,8 +10,7 @@ export default class Card {
   _getTemplate() {
     return document
       .querySelector(this._templateSelector)
-      .content
-      .querySelector(".card")
+      .content.querySelector(".card")
       .cloneNode(true);
   }
 
