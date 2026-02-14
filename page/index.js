@@ -5,18 +5,36 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
+import Api from "../components/Api.js"
 
 import {
   initialCards,
   selectors,
   popups,
   validationConfig,
+  apis
 } from "../utils/constants.js";
+
+const api = new Api(apis.userUrl, apis.cardsUrl, apis.token);
 
 const userInfo = new UserInfo({
   nameSelector: selectors.profileName,
   jobSelector: selectors.profileJob,
+  avatarSelector: selectors.avatar
 });
+
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cardsData]) => {
+    userInfo.setUserInfo({ 
+      name: userData.name, 
+      job: userData.about,});
+    userInfo.setUserAvatar(userData.avatar);
+    cardSection.renderItems(cardsData);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
 
 const imagePopup = new PopupWithImage(popups.image);
 imagePopup.setEventListeners();
@@ -56,8 +74,6 @@ const cardSection = new Section(
   },
   selectors.cardsContainer,
 );
-
-cardSection.renderItems();
 
 const formValidators = {};
 
