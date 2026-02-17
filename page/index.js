@@ -5,14 +5,13 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
-import Api from "../components/Api.js"
+import Api from "../components/Api.js";
 
 import {
-  initialCards,
   selectors,
   popups,
   validationConfig,
-  apis
+  apis,
 } from "../utils/constants.js";
 
 const api = new Api(apis.userUrl, apis.cardsUrl, apis.token);
@@ -20,60 +19,76 @@ const api = new Api(apis.userUrl, apis.cardsUrl, apis.token);
 const userInfo = new UserInfo({
   nameSelector: selectors.profileName,
   jobSelector: selectors.profileJob,
-  avatarSelector: selectors.avatar
+  avatarSelector: selectors.avatar,
 });
 
-Promise.all([api.getUserInfo(), api.getInitialCards()])
-  .then(([userData, cardsData]) => {
-    userInfo.setUserInfo({ 
-      name: userData.name, 
-      job: userData.about,});
+api
+  .getUserInfo()
+  .then((userData) => {
+    userInfo.setUserInfo({
+      name: userData.name,
+      job: userData.about,
+    });
     userInfo.setUserAvatar(userData.avatar);
-    cardSection.renderItems(cardsData);
   })
   .catch((err) => {
     console.error(err);
   });
 
+let cardsSection;
+
+api
+  .getInitialCards()
+  .then((cardsData) => {
+    cardsSection = new Section(
+      {
+        items: cardsData,
+        renderer: (cardData) => {
+          const card = new Card(
+            { title: cardData.name, link: cardData.link },
+            selectors.cardTemplate,
+            (name, link) => {
+              imagePopup.open(name, link);
+            },
+          );
+          cardsSection.addItem(card.generateCard());
+        },
+      },
+      selectors.cardsContainer,
+    );
+    cardsSection.renderItems();
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 const imagePopup = new PopupWithImage(popups.image);
 imagePopup.setEventListeners();
 
 const profilePopup = new PopupWithForm(popups.editProfile, (data) => {
-  userInfo.setUserInfo({ name: data.name, job: data.description });
+  api.editUserInfo(data.name, data.description).then((userData) => {
+    userInfo.setUserInfo({
+      name: userData.name,
+      job: userData.about,
+    });
+  });
   profilePopup.close();
 });
 profilePopup.setEventListeners();
 
 const addCardPopup = new PopupWithForm(popups.addCard, (data) => {
-  const card = new Card(
-    { title: data.placeName, link: data.link },
-    selectors.cardTemplate,
-    (name, link) => {
-      imagePopup.open(name, link);
-    },
-  );
-  cardSection.addItem(card.generateCard());
-  addCardPopup.close();
+  api.addCard(data.placeName, data.link).then((cardData) => {
+    const card = new Card(
+      { title: cardData.name, link: cardData.link },
+      selectors.cardTemplate,
+      (name, link) => {
+        imagePopup.open(name, link);
+      },
+    );
+    addCardPopup.close();
+  });
 });
 addCardPopup.setEventListeners();
-
-const cardSection = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const card = new Card(
-        { title: item.name, link: item.link },
-        selectors.cardTemplate,
-        (name, link) => {
-          imagePopup.open(name, link);
-        },
-      );
-      cardSection.addItem(card.generateCard());
-    },
-  },
-  selectors.cardsContainer,
-);
 
 const formValidators = {};
 
