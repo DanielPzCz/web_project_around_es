@@ -1,3 +1,4 @@
+// components/Api.js
 export default class Api {
   constructor(userUrl, cardsUrl, token) {
     this._userUrl = userUrl;
@@ -21,8 +22,17 @@ export default class Api {
     }).then(this._checkResponse);
   }
 
-  getInitialCards() {
+  getCards() {
     return fetch(this._cardsUrl, {
+      method: "GET",
+      headers: {
+        authorization: this._token,
+      },
+    }).then(this._checkResponse);
+  }
+
+  _getCardById(cardId) {
+    return fetch(`${this._cardsUrl}/${cardId}`, {
       method: "GET",
       headers: {
         authorization: this._token,
@@ -67,7 +77,7 @@ export default class Api {
     }).then(this._checkResponse);
   }
 
-  changeLikeCardStatus(cardId, isLiked) {
+  LikeCard(cardId, isLiked) {
     return fetch(`${this._cardsUrl}/${cardId}/likes`, {
       method: isLiked ? "DELETE" : "PUT",
       headers: {

@@ -41,6 +41,7 @@ export const popups = {
   editProfile: "#edit-popup",
   addCard: "#new-card-popup",
   image: "#image-popup",
+  deleteCard: "#delete-popup",
 };
 
 export const validationConfig = {

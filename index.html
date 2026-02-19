@@ -126,6 +126,21 @@
         </div>
       </div>
     </div>
+    <div class="popup" id="delete-popup">
+      <div class="popup__content">
+        <button
+          aria-label="Cerrar ventana emergente"
+          class="popup__close"
+          type="button"
+        ></button>
+        <h3 class="popup__title">¿Eliminar tarjeta?</h3>
+        <form class="popup__form" id="delete-card-form" novalidate>
+          <button class="button popup__button" type="submit">
+            Sí
+          </button>
+        </form>
+      </div>
+    </div>
     <template id="template__card">
       <li class="card">
         <img class="card__image" src="" alt="" />

@@ -3,6 +3,7 @@ import Card from "../components/Card.js";
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 import Api from "../components/Api.js";
@@ -38,7 +39,7 @@ api
 let cardsSection;
 
 api
-  .getInitialCards()
+  .getCards()
   .then((cardsData) => {
     cardsSection = new Section(
       {
@@ -47,11 +48,21 @@ api
           const card = new Card(
             { title: cardData.name, link: cardData.link },
             selectors.cardTemplate,
-            (name, link) => {
-              imagePopup.open(name, link);
+            () => {
+              imagePopup.open(cardData.name, cardData.link);
             },
+            () => {
+              api.LikeCard(cardData._id, cardData.isLiked)
+              console.log(cardData._id, cardData.isLiked)
+            },
+            () => {
+              deleteCardPopup.open();
+            }
           );
           cardsSection.addItem(card.generateCard());
+          if (cardData.isLiked) {
+            card._likeButton.classList.add("card__like-button_is-active");
+          }
         },
       },
       selectors.cardsContainer,
@@ -81,14 +92,26 @@ const addCardPopup = new PopupWithForm(popups.addCard, (data) => {
     const card = new Card(
       { title: cardData.name, link: cardData.link },
       selectors.cardTemplate,
-      (name, link) => {
-        imagePopup.open(name, link);
+      () => {
+        imagePopup.open(cardData.name, cardData.link);
       },
+      () => {
+        api.LikeCard(cardData._id, cardData.isLiked);
+        console.log(cardData._id, cardData.isLiked);
+      },
+      () => {
+        deleteCardPopup.open();
+      }
     );
     addCardPopup.close();
+    cardsSection.addItem(card.generateCard());
   });
 });
 addCardPopup.setEventListeners();
+
+const deleteCardPopup = new PopupWithConfirmation(popups.deleteCard, () => {
+});
+deleteCardPopup.setEventListeners();
 
 const formValidators = {};
 
