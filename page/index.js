@@ -46,18 +46,22 @@ api
         items: cardsData,
         renderer: (cardData) => {
           const card = new Card(
-            { title: cardData.name, link: cardData.link },
+            {
+              isLiked: cardData.isLiked,
+              _id: cardData._id,
+              title: cardData.name,
+              link: cardData.link,
+            },
             selectors.cardTemplate,
-            () => {
-              imagePopup.open(cardData.name, cardData.link);
+            (title, link) => {
+              imagePopup.open(title, link);
             },
-            () => {
-              api.LikeCard(cardData._id, cardData.isLiked)
-              console.log(cardData._id, cardData.isLiked)
+            (_id, isLiked) => {
+              api.LikeCard(_id, isLiked);
             },
-            () => {
-              deleteCardPopup.open();
-            }
+            (_id) => {
+              deleteCardPopup.open(_id, card._element);
+            },
           );
           cardsSection.addItem(card.generateCard());
           if (cardData.isLiked) {
@@ -97,11 +101,10 @@ const addCardPopup = new PopupWithForm(popups.addCard, (data) => {
       },
       () => {
         api.LikeCard(cardData._id, cardData.isLiked);
-        console.log(cardData._id, cardData.isLiked);
       },
       () => {
-        deleteCardPopup.open();
-      }
+        return deleteCardPopup.open();
+      },
     );
     addCardPopup.close();
     cardsSection.addItem(card.generateCard());
@@ -109,8 +112,19 @@ const addCardPopup = new PopupWithForm(popups.addCard, (data) => {
 });
 addCardPopup.setEventListeners();
 
-const deleteCardPopup = new PopupWithConfirmation(popups.deleteCard, () => {
-});
+const deleteCardPopup = new PopupWithConfirmation(
+  popups.deleteCard,
+  (id, element) => {
+    api
+      .deleteCard(id)
+      .then(() => {
+        element.remove();
+        deleteCardPopup.close();
+      })
+      .catch((err) => console.error(err));
+  },
+);
+
 deleteCardPopup.setEventListeners();
 
 const formValidators = {};

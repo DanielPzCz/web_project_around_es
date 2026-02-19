@@ -1,8 +1,17 @@
 // components/Card.js
 export default class Card {
-  constructor({ title, link }, templateSelector, handleImageClick, handleLikeClick, handleDeleteClick) {
+  constructor(
+    { isLiked, _id, title, link },
+    templateSelector,
+    handleImageClick,
+    handleLikeClick,
+    handleDeleteClick,
+  ) {
     this._title = title;
     this._link = link;
+    this._isLiked = isLiked;
+    this._id = _id;
+
     this._templateSelector = templateSelector;
     this._handleImageClick = handleImageClick;
     this._handleLikeClick = handleLikeClick;
@@ -18,16 +27,16 @@ export default class Card {
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", () => {
-      this._handleLikeClick();
+      this._handleLikeClick(this._id, this._isLiked);
       this._likeButton.classList.toggle("card__like-button_is-active");
     });
 
     this._deleteButton.addEventListener("click", () => {
-      this._handleDeleteClick();
-    }); 
+      this._handleDeleteClick(this._id);
+    });
 
     this._image.addEventListener("click", () => {
-      this._handleImageClick();
+      this._handleImageClick(this._title, this._link);
     });
   }
 
