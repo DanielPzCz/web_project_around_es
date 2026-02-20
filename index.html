@@ -18,7 +18,14 @@
       </header>
       <main class="content" id="main__content">
         <section class="profile page__section">
-          <img class="profile__image" src="" alt="Avatar" />
+          <div class="profile__avatar-container">
+            <button 
+              aria-label="Cambiar foto" 
+              class="profile__avatar-edit" 
+              type="button"
+            ></button>
+            <img class="profile__image" src="" alt="Avatar" />
+          </div>
           <div class="profile__info">
             <h1 class="profile__title"></h1>
             <button
@@ -135,6 +142,30 @@
         ></button>
         <h3 class="popup__title">¿Eliminar tarjeta?</h3>
         <form class="popup__form" id="delete-card-form" novalidate>
+          <button class="button popup__button" type="submit">
+            Sí
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="popup" id="edit-avatar-popup">
+      <div class="popup__content">
+        <button
+          aria-label="Cerrar ventana emergente"
+          class="popup__close"
+          type="button"
+        ></button>
+        <h3 class="popup__title">Cambiar foto de perfil</h3>
+        <form class="popup__form" id="edit-avatar-form" novalidate>
+          <input
+            class="popup__input popup__input_type_avatar-url"
+            name="avatarLink"
+            id="avatarLink"
+            placeholder="Enlace a la imagen"
+            type="url"
+            required
+          />
+          <span class="popup__input-error avatarLink-input-error"></span>
           <button class="button popup__button" type="submit">
             Sí
           </button>

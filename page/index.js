@@ -86,7 +86,8 @@ const profilePopup = new PopupWithForm(popups.editProfile, (data) => {
       name: userData.name,
       job: userData.about,
     });
-  });
+  })
+  .catch((err) => console.error(err));
   profilePopup.close();
 });
 profilePopup.setEventListeners();
@@ -96,21 +97,40 @@ const addCardPopup = new PopupWithForm(popups.addCard, (data) => {
     const card = new Card(
       { title: cardData.name, link: cardData.link },
       selectors.cardTemplate,
-      () => {
-        imagePopup.open(cardData.name, cardData.link);
+      {
+        isLiked: cardData.isLiked,
+        _id: cardData._id,
+        title: cardData.name,
+        link: cardData.link,
       },
-      () => {
-        api.LikeCard(cardData._id, cardData.isLiked);
+      selectors.cardTemplate,
+      (title, link) => {
+        imagePopup.open(title, link);
       },
-      () => {
-        return deleteCardPopup.open();
+      (_id, isLiked) => {
+        api.LikeCard(_id, isLiked);
+      },
+      (_id) => {
+        deleteCardPopup.open(_id, card._element);
       },
     );
     addCardPopup.close();
     cardsSection.addItem(card.generateCard());
-  });
+  })
+  .catch((err) => console.error(err));
 });
 addCardPopup.setEventListeners();
+
+const avatarPopup = new PopupWithForm(popups.editAvatar, (data) => {
+  api.editAvatar(data.avatar)
+    .then((userData) => {
+      userInfo.setUserAvatar(userData.avatar);
+      avatarPopup.close();
+    })
+    .catch(console.error);
+});
+
+avatarPopup.setEventListeners();
 
 const deleteCardPopup = new PopupWithConfirmation(
   popups.deleteCard,
@@ -152,4 +172,11 @@ document
   .addEventListener("click", () => {
     addCardPopup.open();
     formValidators["new-card-form"].resetValidation();
+  });
+
+document
+  .querySelector(selectors.avatarContainer)
+  .addEventListener("click", () => {
+    avatarPopup.open();
+    formValidators["edit-avatar-form"].resetValidation();
   });

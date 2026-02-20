@@ -32,6 +32,7 @@ export const selectors = {
   profileName: ".profile__title",
   profileJob: ".profile__description",
   avatar: ".profile__image",
+  avatarContainer: ".profile__avatar-container",
   editProfileButton: ".profile__edit-button",
   addCardButton: ".profile__add-button",
   debug: ".footer__debug",
@@ -42,6 +43,7 @@ export const popups = {
   addCard: "#new-card-popup",
   image: "#image-popup",
   deleteCard: "#delete-popup",
+  editAvatar: "#edit-avatar-popup",
 };
 
 export const validationConfig = {
