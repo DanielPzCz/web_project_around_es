@@ -1,4 +1,5 @@
-// components/Card.js
+import placeholder from "../images/placeholder.jpg";
+
 export default class Card {
   constructor(
     { isLiked, _id, title, link },
@@ -27,7 +28,8 @@ export default class Card {
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", () => {
-      this._handleLikeClick(this._id, this._isLiked);
+      this._isLiked = !this._isLiked;
+      this._handleLikeClick(this._id, !this._isLiked);
       this._likeButton.classList.toggle("card__like-button_is-active");
     });
 
@@ -43,7 +45,7 @@ export default class Card {
   _handleImageError() {
     this._image.onerror = () => {
       this._image.onerror = null;
-      this._image.src = "../images/placeholder.jpg";
+      this._image.src = placeholder;
     };
   }
 

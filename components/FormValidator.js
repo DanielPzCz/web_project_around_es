@@ -1,4 +1,3 @@
-// components/FormValidator.js
 export default class FormValidator {
   constructor(config, formElement) {
     this._config = config;
@@ -33,7 +32,11 @@ export default class FormValidator {
 
   _hasInvalidInput() {
     return this._inputList.some((inputElement) => {
-      return !inputElement.validity.valid;
+      if (!inputElement.validity.valid) return true;
+      if (inputElement.type === "url") {
+        return !this._isValidImageUrl(inputElement.value);
+      }
+      return false;
     });
   }
 
@@ -45,6 +48,26 @@ export default class FormValidator {
     }
   }
 
+  _isValidImageUrl(url) {
+    try {
+      const parsed = new URL(url.trim());
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:")
+        return false;
+      const hostname = parsed.hostname;
+      if (hostname.startsWith(".") || hostname.endsWith(".")) return false;
+      const labels = hostname.split(".");
+      if (labels.length < 2) return false;
+      for (const label of labels) {
+        if (!/^[a-zA-Z0-9-]{1,63}$/.test(label)) return false;
+      }
+      const tld = labels[labels.length - 1];
+      if (!/^[a-zA-Z]{2,}$/.test(tld)) return false;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   _setEventListeners() {
     this._toggleButtonState();
 
@@ -52,10 +75,17 @@ export default class FormValidator {
       inputElement.addEventListener("input", () => {
         if (!inputElement.validity.valid) {
           this._showInputError(inputElement, inputElement.validationMessage);
+          this._toggleButtonState();
+          return;
+        }
+        if (
+          inputElement.type === "url" &&
+          !this._isValidImageUrl(inputElement.value)
+        ) {
+          this._showInputError(inputElement, "Please enter a valid URL");
         } else {
           this._hideInputError(inputElement);
         }
-
         this._toggleButtonState();
       });
     });

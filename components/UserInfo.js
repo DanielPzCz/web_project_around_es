@@ -1,4 +1,5 @@
-// components/UserInfo.js
+import placeholder from "../images/placeholder.jpg";
+
 export default class UserInfo {
   constructor({ nameSelector, jobSelector, avatarSelector }) {
     this._nameElement = document.querySelector(nameSelector);
@@ -10,16 +11,24 @@ export default class UserInfo {
     return {
       name: this._nameElement.textContent,
       job: this._professionElement.textContent,
-      avatar: this._avatarElement.src,
+      avatar: this._avatarElement.src
     };
   }
 
-  setUserInfo({ name, job}) {
+  setUserInfo({ name, job }) {
     this._nameElement.textContent = name;
     this._professionElement.textContent = job;
   }
 
-  setUserAvatar(avatarUrl) {
-    this._avatarElement.src = avatarUrl;
+  _handleImageError() {
+    this._avatarElement.onerror = () => {
+      this._avatarElement.onerror = null;
+      this._avatarElement.src = placeholder;
+    };
+  }
+
+  setUserAvatar(url) {
+    this._avatarElement.src = url;
+    this._handleImageError();
   }
 }

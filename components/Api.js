@@ -1,4 +1,3 @@
-// components/Api.js
 export default class Api {
   constructor(userUrl, cardsUrl, token) {
     this._userUrl = userUrl;
@@ -24,15 +23,6 @@ export default class Api {
 
   getCards() {
     return fetch(this._cardsUrl, {
-      method: "GET",
-      headers: {
-        authorization: this._token,
-      },
-    }).then(this._checkResponse);
-  }
-
-  _getCardById(cardId) {
-    return fetch(`${this._cardsUrl}/${cardId}`, {
       method: "GET",
       headers: {
         authorization: this._token,

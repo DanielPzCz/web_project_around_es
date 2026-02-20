@@ -66,7 +66,6 @@
 
 .profile__avatar-container:hover .profile__avatar-edit {
   opacity: 1;
-  pointer-events: auto;
 }
 
 .profile__avatar-container:hover .profile__image {
@@ -136,7 +135,6 @@
 
   .profile__title {
     font-size: 22px;
-    min-width: 201px;
     max-width: 222px;
   }
 
@@ -147,7 +145,7 @@
     max-width: 282px;
   }
 
-  .profile__image {
+  .profile__avatar-container {
     margin-right: 0;
   }
 

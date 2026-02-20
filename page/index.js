@@ -1,4 +1,3 @@
-// pages/index.js
 import Card from "../components/Card.js";
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
@@ -57,7 +56,7 @@ api
               imagePopup.open(title, link);
             },
             (_id, isLiked) => {
-              api.LikeCard(_id, isLiked);
+              api.LikeCard(_id, isLiked).catch((err) => console.error(err));
             },
             (_id) => {
               deleteCardPopup.open(_id, card._element);
@@ -80,68 +79,112 @@ api
 const imagePopup = new PopupWithImage(popups.image);
 imagePopup.setEventListeners();
 
-const profilePopup = new PopupWithForm(popups.editProfile, (data) => {
-  api.editUserInfo(data.name, data.description).then((userData) => {
-    userInfo.setUserInfo({
-      name: userData.name,
-      job: userData.about,
-    });
-  })
-  .catch((err) => console.error(err));
-  profilePopup.close();
-});
+const profilePopup = new PopupWithForm(
+  popups.editProfile,
+  (data) => {
+    return api
+      .editUserInfo(data.name, data.description)
+      .then((userData) => {
+        userInfo.setUserInfo({
+          name: userData.name,
+          job: userData.about,
+        });
+      })
+      .catch((err) => console.error(err));
+  },
+  (isLoading) => {
+    if (isLoading) {
+      profilePopup._submitButton.textContent = "Guardando...";
+    } else {
+      profilePopup._submitButton.textContent = "Guardar";
+    }
+  },
+);
 profilePopup.setEventListeners();
 
-const addCardPopup = new PopupWithForm(popups.addCard, (data) => {
-  api.addCard(data.placeName, data.link).then((cardData) => {
-    const card = new Card(
-      { title: cardData.name, link: cardData.link },
-      selectors.cardTemplate,
-      {
-        isLiked: cardData.isLiked,
-        _id: cardData._id,
-        title: cardData.name,
-        link: cardData.link,
-      },
-      selectors.cardTemplate,
-      (title, link) => {
-        imagePopup.open(title, link);
-      },
-      (_id, isLiked) => {
-        api.LikeCard(_id, isLiked);
-      },
-      (_id) => {
-        deleteCardPopup.open(_id, card._element);
-      },
-    );
-    addCardPopup.close();
-    cardsSection.addItem(card.generateCard());
-  })
-  .catch((err) => console.error(err));
-});
+const addCardPopup = new PopupWithForm(
+  popups.addCard,
+  (data) => {
+    return api
+      .addCard(data.placeName, data.link)
+      .then((cardData) => {
+        const card = new Card(
+          {
+            isLiked: cardData.isLiked,
+            _id: cardData._id,
+            title: cardData.name,
+            link: cardData.link,
+          },
+          selectors.cardTemplate,
+          (title, link) => {
+            imagePopup.open(title, link);
+          },
+          (_id, isLiked) => {
+            api.LikeCard(_id, isLiked).catch((err) => console.error(err));
+          },
+          (_id) => {
+            deleteCardPopup.open(_id, card._element);
+          },
+        );
+        addCardPopup.close();
+        cardsSection.addItem(card.generateCard());
+      })
+      .catch((cardData) => {
+        console.error(cardData);
+      });
+  },
+  (isLoading) => {
+    if (isLoading) {
+      addCardPopup._submitButton.textContent = "Creando...";
+    } else {
+      addCardPopup._submitButton.textContent = "Crear";
+    }
+  },
+);
 addCardPopup.setEventListeners();
 
-const avatarPopup = new PopupWithForm(popups.editAvatar, (data) => {
-  api.editAvatar(data.avatar)
-    .then((userData) => {
-      userInfo.setUserAvatar(userData.avatar);
-      avatarPopup.close();
-    })
-    .catch(console.error);
-});
+const avatarPopup = new PopupWithForm(
+  popups.editAvatar,
+  (data) => {
+    return api
+      .editAvatar(data.avatarLink)
+      .then((userData) => {
+        userInfo.setUserAvatar(userData.avatar);
+        avatarPopup.close();
+      })
+      .catch((err) => {
+        console.error(err);
+        avatarPopup.close();
+      });
+  },
+  (isLoading) => {
+    if (isLoading) {
+      avatarPopup._submitButton.textContent = "Guardando...";
+    } else {
+      avatarPopup._submitButton.textContent = "Guardar";
+    }
+  },
+);
 
 avatarPopup.setEventListeners();
 
 const deleteCardPopup = new PopupWithConfirmation(
   popups.deleteCard,
   (id, element) => {
-    api
+    return api
       .deleteCard(id)
       .then(() => {
         element.remove();
         deleteCardPopup.close();
       })
       .catch((err) => console.error(err));
+  },
+  (isLoading) => {
+    if (isLoading) {
+      deleteCardPopup._submitButton.textContent = "Eliminando...";
+    } else {
+      deleteCardPopup._submitButton.textContent = "Sí";
+    }
   },
 );
 
