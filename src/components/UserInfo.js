@@ -1,5 +1,3 @@
-import placeholder from "../images/placeholder.jpg";
-
 export default class UserInfo {
   constructor({ nameSelector, jobSelector, avatarSelector }) {
     this._nameElement = document.querySelector(nameSelector);
@@ -11,7 +9,7 @@ export default class UserInfo {
     return {
       name: this._nameElement.textContent,
       job: this._professionElement.textContent,
-      avatar: this._avatarElement.src
+      avatar: this._avatarElement.src,
     };
   }
 
@@ -23,7 +21,7 @@ export default class UserInfo {
   _handleImageError() {
     this._avatarElement.onerror = () => {
       this._avatarElement.onerror = null;
-      this._avatarElement.src = placeholder;
+      this._avatarElement.src = "../images/placeholder.jpg";
     };
   }
 

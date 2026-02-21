@@ -1,5 +1,3 @@
-import placeholder from "../images/placeholder.jpg";
-
 export default class Card {
   constructor(
     { isLiked, _id, title, link },
@@ -45,7 +43,7 @@ export default class Card {
   _handleImageError() {
     this._image.onerror = () => {
       this._image.onerror = null;
-      this._image.src = placeholder;
+      this._image.src = "../images/placeholder.jpg";
     };
   }
 
