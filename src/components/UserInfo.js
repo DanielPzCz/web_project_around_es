@@ -21,7 +21,7 @@ export default class UserInfo {
   _handleImageError() {
     this._avatarElement.onerror = () => {
       this._avatarElement.onerror = null;
-      this._avatarElement.src = "../images/placeholder.jpg";
+      this._avatarElement.src = "../src/images/placeholder.jpg";
     };
   }
 

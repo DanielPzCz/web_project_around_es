@@ -43,7 +43,7 @@ export default class Card {
   _handleImageError() {
     this._image.onerror = () => {
       this._image.onerror = null;
-      this._image.src = "../images/placeholder.jpg";
+      this._image.src = "../src/images/placeholder.jpg";
     };
   }
 
