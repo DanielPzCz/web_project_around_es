@@ -57,17 +57,6 @@ La aplicación presenta una interfaz intuitiva y responsiva que se adapta a dife
 - **UserInfo**: Gestiona la información del perfil del usuario (nombre, descripción y avatar)
 - **FormValidator**: Valida formularios en tiempo real y gestiona el estado del botón de envío
 
-## Instalación y Uso
-
-```bash
-git clone https://github.com/DanielPzCz/web_project_around_es.git
-cd web_project_around_es
-npm install
-npm run build
-```
-
-También puedes abrirlo directamente con la extensión Live Server en VS Code.
-
 ## Autor
 
 Daniel Pérez Cruz
