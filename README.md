@@ -6,14 +6,22 @@ Around The U.S. es una aplicación web interactiva que permite a los usuarios co
 
 La aplicación presenta una interfaz intuitiva y responsiva que se adapta a diferentes tamaños de pantalla, ofreciendo una experiencia de usuario óptima tanto en dispositivos móviles como en escritorio.
 
+## Demo en vivo
+
+[https://danielpzcz.github.io/web_project_around_es/](https://danielpzcz.github.io/web_project_around_es/)
+
 ## Funcionalidades
 
 - **Edición de Perfil**: Los usuarios pueden actualizar su nombre y descripción personal
+- **Edición de Avatar**: Cambio de foto de perfil mediante URL
 - **Gestión de Tarjetas**: Agregar nuevas tarjetas con título y enlace de imagen
-- **Interacciones**: Dar "me gusta" y eliminar tarjetas
+- **Interacciones**: Dar "me gusta" y eliminar tarjetas (con popup de confirmación)
 - **Visualización de Imágenes**: Ver imágenes en tamaño completo mediante un popup interactivo
 - **Validación de Formularios**: Validación en tiempo real de los campos de entrada
-- **Diseño Responsivo**: Adaptación fluida a diferentes tamaños de pantalla
+- **Estados de Carga**: Los botones de envío muestran retroalimentación visual mientras las peticiones están en proceso
+- **Manejo de Errores**: Las imágenes que fallan al cargar muestran una imagen de placeholder
+- **Diseño Responsivo**: Adaptación fluida a diferentes tamaños de pantalla (320px–1280px)
+- **Persistencia de Datos**: Toda la información se obtiene y guarda en un servidor remoto mediante una API REST
 
 ## Tecnologías Utilizadas
 
@@ -29,21 +37,36 @@ La aplicación presenta una interfaz intuitiva y responsiva que se adapta a dife
   - Template elements
   - Clases y módulos ES6
   - Importación/exportación de módulos
+- **Webpack**: Empaquetado de módulos y assets
+- **API REST**: Comunicación con servidor remoto usando Fetch API
+  - GET — obtener perfil y tarjetas
+  - POST — crear nuevas tarjetas
+  - PATCH — actualizar perfil y avatar
+  - PUT/DELETE — likes y eliminación de tarjetas
 - **Fuentes Web**: Google Fonts (Inter)
 
-### Clases Principales
+## Clases Principales
 
+- **Api**: Gestiona todas las peticiones HTTP al servidor (obtener/actualizar perfil, obtener/crear/eliminar tarjetas, likes)
 - **Card**: Crea y gestiona tarjetas individuales con funcionalidad de "me gusta", eliminación y visualización de imágenes
 - **Section**: Renderiza listas de elementos en el DOM
 - **Popup**: Clase base para ventanas emergentes con funcionalidad de apertura/cierre
-- **PopupWithForm**: Extiende Popup para manejar formularios
+- **PopupWithForm**: Extiende Popup para manejar formularios con estados de carga
 - **PopupWithImage**: Extiende Popup para mostrar imágenes en tamaño completo
-- **UserInfo**: Gestiona la información del perfil del usuario
-- **FormValidator**: Valida formularios en tiempo real
+- **PopupWithConfirmation**: Extiende Popup para confirmar acciones destructivas (eliminación de tarjetas)
+- **UserInfo**: Gestiona la información del perfil del usuario (nombre, descripción y avatar)
+- **FormValidator**: Valida formularios en tiempo real y gestiona el estado del botón de envío
 
-## Link GitHub Pages
+## Instalación y Uso
 
-https://danielpzcz.github.io/web_project_around_es/
+```bash
+git clone https://github.com/DanielPzCz/web_project_around_es.git
+cd web_project_around_es
+npm install
+npm run build
+```
+
+También puedes abrirlo directamente con la extensión Live Server en VS Code.
 
 ## Autor
 
